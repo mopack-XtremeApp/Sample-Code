@@ -1,5 +1,7 @@
 package com.assignment.security.service;
 
+import java.util.List;
+
 import com.assignment.security.User;
 
 /**
@@ -45,5 +47,11 @@ public interface IUserAccountService {
 	 * @throws Exception
 	 */
 	public User findByUserName(String username) throws Exception;
+
+	/**
+	 * This method returns all the users of the system
+	 * @return
+	 */
+	public List<User> findAll();
 
 }

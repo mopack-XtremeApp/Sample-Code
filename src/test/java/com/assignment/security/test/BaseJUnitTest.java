@@ -16,7 +16,7 @@ import com.assignment.security.service.IUserAccountService;
 @ContextConfiguration(locations = { "classpath:servlet-context.xml",
 		"classpath:security-app-context.xml" })
 @WebAppConfiguration
-public class BaseJUnitTest {
+public abstract class BaseJUnitTest {
 
 	@Autowired
 	protected WebApplicationContext ctx;

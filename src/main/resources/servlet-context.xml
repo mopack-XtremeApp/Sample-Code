@@ -39,5 +39,9 @@
 	<mvc:annotation-driven
 		content-negotiation-manager="contentNegotiationManager" />
 
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+		<property name = "alwaysUseFullPath" value = "true" />
+	</bean>
+
 
 </beans>

@@ -8,6 +8,7 @@
 	<!-- URL based authorization configuration -->
 	<http use-expressions="true" entry-point-ref="restAuthenticationEntryPoint">
 		<intercept-url pattern="/secure/**" access="hasRole('ROLE_SUPER_USER')" />
+		<intercept-url pattern="/securehtml/**" access="hasRole('ROLE_SUPER_USER')" />
 	</http>
 
 	<!-- Configuring Authentication Manager -->

@@ -1,5 +1,8 @@
 package com.assignment.security.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -8,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -58,6 +63,7 @@ public class UserAccountController {
 		HttpOperationResult userOperationResult = new HttpOperationResult();
 		userOperationResult.setOperation("addUser");
 		String username = request.getParameter("username");
+		userOperationResult.setMessage("Fail");
 		try {
 
 			logger.info("A request for addUser for userName " + username);
@@ -65,13 +71,15 @@ public class UserAccountController {
 			User existingUser = userAccountSpringService
 					.findByUserName(username);
 			if (existingUser != null) {
+				userOperationResult.setMessage("Already Exist");
 				throw new Exception("User already exist with username "
 						+ username);
+
 			}
 			User transientUser = new User();
 			transientUser.setEmailAddress(request.getParameter("emailAddress"));
 			transientUser.setFirstName(request.getParameter("firstName"));
-			transientUser.setId(1l);
+
 			transientUser.setLastName(request.getParameter("lastName"));
 			transientUser.setUsername(request.getParameter("username"));
 			// Creating dynamic salt
@@ -94,7 +102,6 @@ public class UserAccountController {
 			logger.error(
 					"An error while adding user " + username + " "
 							+ t.getMessage(), t);
-			userOperationResult.setMessage("Fail");
 
 		}
 		return userOperationResult;
@@ -109,7 +116,7 @@ public class UserAccountController {
 	 * @return
 	 */
 
-	@RequestMapping(value = "/updateUser", method = RequestMethod.PUT, produces = {
+	@RequestMapping(value = "/updateUser", method = RequestMethod.POST, produces = {
 			"application/xml", "application/json" })
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody
@@ -128,24 +135,18 @@ public class UserAccountController {
 						+ username);
 			}
 
-			if (!isNullOrEmpty(request.getParameter("emailAddress")))
-				existingUser.setEmailAddress(request
-						.getParameter("emailAddress"));
-			if (!isNullOrEmpty(request.getParameter("firstName")))
-				existingUser.setFirstName(request.getParameter("firstName"));
-			if (!isNullOrEmpty(request.getParameter("lastName")))
-				existingUser.setLastName(request.getParameter("lastName"));
-			if (!isNullOrEmpty(request.getParameter("password"))) {
+			existingUser.setEmailAddress(request.getParameter("emailAddress"));
+			existingUser.setFirstName(request.getParameter("firstName"));
+			existingUser.setLastName(request.getParameter("lastName"));
 
-				// Creating dynamic salt
-				Object dynamicSalt = this.reflectionSaltSource
-						.getSalt(existingUser);
+			// Creating dynamic salt
+	/*		Object dynamicSalt = this.reflectionSaltSource
+					.getSalt(existingUser);
 
-				String password = this.md5PasswordEncoder.encodePassword(
-						request.getParameter("password"), dynamicSalt);
-				existingUser.setPassword(password);
-			}
-
+			String password = this.md5PasswordEncoder.encodePassword(
+					request.getParameter("password"), dynamicSalt);
+			existingUser.setPassword(password);
+*/
 			userAccountSpringService.updateUser(existingUser);
 
 			userOperationResult.setMessage("Success");
@@ -245,4 +246,32 @@ public class UserAccountController {
 		}
 
 	}
+
+	/**
+	 */
+	@RequestMapping(value = "/findAll", method = RequestMethod.GET, produces = {
+			"application/xml", "application/json" })
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody
+	java.util.List<User> findAll() {
+		try {
+			logger.info("A request for findAll");
+
+			List<User> existingUsers = userAccountSpringService.findAll();
+			if (existingUsers == null) {
+				return new ArrayList<User>();
+			}
+
+			logger.info("Sucessfully completed request for findAll");
+
+			return existingUsers;
+		} catch (Throwable t) {
+			logger.error("An error while findAll users " + t.getMessage(), t);
+
+			return null;
+
+		}
+
+	}
+
 }

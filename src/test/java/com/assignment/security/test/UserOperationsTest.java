@@ -66,7 +66,7 @@ public class UserOperationsTest extends BaseJUnitTest {
 		// Here we are changing the value of firstName to updateFirstName for
 		// user username1
 		mockMvc.perform(
-				put("/secure/user/updateUser").param("username", "username1")
+				post("/secure/user/updateUser").param("username", "username1")
 						.param("firstName", "updatedFirstName")
 						.accept(MediaType.APPLICATION_JSON)).andDo(print())
 				.andExpect(status().isOk())
@@ -91,7 +91,7 @@ public class UserOperationsTest extends BaseJUnitTest {
 	@Test
 	public void updateUserWhichDoesNotExistInTheSystem() throws Exception {
 		mockMvc.perform(
-				put("/secure/user/updateUser").param("username", "username5")
+				post("/secure/user/updateUser").param("username", "username5")
 						.param("firstName", "updatedFirstName")
 						.accept(MediaType.APPLICATION_JSON)).andDo(print())
 				.andExpect(status().isOk())

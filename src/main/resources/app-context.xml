@@ -2,18 +2,24 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:jpa="http://www.springframework.org/schema/data/jpa" xmlns:util="http://www.springframework.org/schema/util"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
                            http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/util 
                            http://www.springframework.org/schema/util/spring-util-3.1.xsd 
                            http://www.springframework.org/schema/data/jpa
                            http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd
-                           http://java.sun.com/xml/ns/persistence/orm orm_2_0.xsd">
+                           http://java.sun.com/xml/ns/persistence/orm orm_2_0.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                           ">
 
 	<util:properties id="appConfig" location="classpath:app-config.properties" />
 
 	<jpa:repositories base-package="com.assignment.security.repository" />
 
+	
+    
+    
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
 		p:entityManagerFactory-ref="entityManagerFactory" />
 

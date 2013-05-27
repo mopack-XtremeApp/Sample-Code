@@ -1,6 +1,7 @@
 package com.assignment.security.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +34,7 @@ import com.assignment.security.service.IUserAccountService;
  */
 @Controller
 public class UserAuthenticationController {
-
+ 
 	@Autowired
 	private IUserAccountService userAccountSpringService;
 	
@@ -86,6 +88,31 @@ public class UserAuthenticationController {
 		} catch (Throwable throwable) {
 			logger.error(throwable.getMessage(), throwable);
 
+		}
+
+		return result;
+	}
+ 
+	@RequestMapping(value = "/logout", method = RequestMethod.GET, produces = {
+			"application/xml", "application/json" })
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody
+	HttpOperationResult logout(HttpServletRequest request,HttpServletResponse response) {
+		HttpOperationResult result = new HttpOperationResult();
+		result.setOperation("logout");
+		result.setMessage("Logout Failed");
+		try {
+			
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		      if (auth != null){    
+		         new SecurityContextLogoutHandler().logout(request, response, auth);
+		        // new PersistentTokenBasedRememberMeServices().logout(request, response, auth);
+		      }
+			result.setMessage("Success");
+			
+		} catch (Throwable throwable) {
+			logger.error(throwable.getMessage(), throwable);
+			result.setMessage("Failed");
 		}
 
 		return result;

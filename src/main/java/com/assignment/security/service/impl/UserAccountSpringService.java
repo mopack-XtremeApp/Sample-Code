@@ -1,5 +1,6 @@
 package com.assignment.security.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -114,6 +115,22 @@ public class UserAccountSpringService implements IUserAccountService {
 					"Error while adding ADMIN SUPER user "
 							+ throwable.getMessage(), throwable);
 		}
+	}
+
+	@Override
+	public List<User> findAll() {
+		logger.debug("A request for findAll");
+		Iterable<User> userIter = this.userRepository.findAll();
+		List<User> systemUsers= new ArrayList<User>();
+		for (User user : userIter) {
+			systemUsers.add(user);
+		}
+		if (systemUsers == null || systemUsers.isEmpty()) {
+			logger.info("No users exist in the system");
+			return null;
+		}
+		logger.debug("Successfully completed the request for findAll");
+		return systemUsers;
 	}
 
 }

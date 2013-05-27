@@ -32,35 +32,50 @@
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>appServlet</servlet-name>
+		<url-pattern>/logout</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>appServlet</servlet-name>
+		<url-pattern>/forgetPassword/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>appServlet</servlet-name>
 		<url-pattern>/secure/*</url-pattern>
 	</servlet-mapping>
 	
-
-
-
-
 
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
 	</filter>
-
-<filter-mapping>
+ 
+	<filter-mapping>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/authenticate</url-pattern>
+	</filter-mapping>
+<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/logout</url-pattern>
+	</filter-mapping>
+
+	
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/forgetPassword/*</url-pattern>
 	</filter-mapping>
 
 	<filter-mapping>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/secure/*</url-pattern>
 	</filter-mapping>
-	
-
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/securehtml/*</url-pattern>
+	</filter-mapping>
+ 
 	<welcome-file-list>
 		<welcome-file>login.html</welcome-file>
 	</welcome-file-list>
-
-
-
+	
 
 </web-app>

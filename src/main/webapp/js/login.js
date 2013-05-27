@@ -1,12 +1,12 @@
-
-var contextPath = "http://rsplws150:8080/spring-hibernate-template/";
+//var contextPath = "http://localhost:8080/assignment-security/";
+var contextPath="http://moti-assignment.herokuapp.com/";
 
 $(document).ready(function() {
 
 	// init validation engine
 	$("#form-login").validationEngine();
 
-	$("#btn-signin").click(function() {
+	$('#form-login').submit(function() {
 		//alert('button clicked');
 		if ($("#form-login").validationEngine('validate')) {
 			$.ajax({
@@ -20,9 +20,9 @@ $(document).ready(function() {
 				success : function(data) {
 
 					if(data.message == "SUPER USER"){
-						window.location = contextPath + "list_user.html";
+						window.location = contextPath + "securehtml/list_user.html";
 					}else if(data.message == "USER"){
-
+						window.location = contextPath + "normal_user.html";
 					}else{
 						alert("User not found");
 					}
@@ -36,6 +36,7 @@ $(document).ready(function() {
 			});
 
 		}
+		return false;
 	});
 
 });
