@@ -1,0 +1,38 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                    http://www.springframework.org/schema/security 
+                    http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+	<!-- URL based authorization configuration -->
+	<http use-expressions="true" entry-point-ref="restAuthenticationEntryPoint">
+		<intercept-url pattern="/secure/**" access="hasRole('ROLE_SUPER_USER')" />
+	</http>
+
+	<!-- Configuring Authentication Manager -->
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider user-service-ref="userAuthenticationService">
+			<password-encoder hash="md5" ref="md5PasswordEncoder">
+				<salt-source ref="reflectionSaltSource" />
+			</password-encoder>
+		</authentication-provider>
+	</authentication-manager>
+
+	<!-- Configuring MD5 Password Encoder, that will be used for -->
+	<beans:bean
+		class="org.springframework.security.authentication.encoding.Md5PasswordEncoder"
+		id="md5PasswordEncoder" />
+
+	<!-- Configuring custom salt -->
+	<beans:bean
+		class="org.springframework.security.authentication.dao.ReflectionSaltSource"
+		id="reflectionSaltSource">
+		<beans:property name="userPropertyToUse" value="username"></beans:property>
+	</beans:bean>
+
+	<!-- Custom authentication service -->
+	<beans:bean id="userAuthenticationService"
+		class="com.assignment.security.service.impl.UserAuthenticationService" />
+
+</beans:beans>   
