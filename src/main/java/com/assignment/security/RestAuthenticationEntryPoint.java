@@ -9,6 +9,11 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
+/**
+ * Custom component to commences an authentication scheme. (Related to Spring Security)
+ * @author Moti Prajapati
+ *
+ */
 @Component("restAuthenticationEntryPoint")
 public final class RestAuthenticationEntryPoint implements
 		AuthenticationEntryPoint {

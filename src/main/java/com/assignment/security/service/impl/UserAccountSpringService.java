@@ -12,6 +12,7 @@ import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.assignment.security.ApplicationConstant;
 import com.assignment.security.Permission;
 import com.assignment.security.User;
 import com.assignment.security.repository.UserRepository;
@@ -38,7 +39,7 @@ public class UserAccountSpringService implements IUserAccountService {
 	@Autowired
 	private SaltSource reflectionSaltSource;
 
-	@Autowired()
+	@Autowired
 	private PasswordEncoder md5PasswordEncoder;
 
 	@PostConstruct
@@ -46,6 +47,9 @@ public class UserAccountSpringService implements IUserAccountService {
 		addDefaultSuperAdminUser();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Long addUser(User transientUser) throws Exception {
 		logger.debug("A request for addUser for username "
 				+ transientUser.getUsername());
@@ -55,6 +59,9 @@ public class UserAccountSpringService implements IUserAccountService {
 		return persistedInstance.getId();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void updateUser(User detachedUser) throws Exception {
 		logger.debug("A request for updateUser for username "
 				+ detachedUser.getUsername());
@@ -64,6 +71,9 @@ public class UserAccountSpringService implements IUserAccountService {
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void deleteUser(User userToDelete) throws Exception {
 		logger.debug("A request for deleteUser for username "
 				+ userToDelete.getUsername());
@@ -73,6 +83,9 @@ public class UserAccountSpringService implements IUserAccountService {
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public User findByUserName(String username) throws Exception {
 		logger.debug("A request for findUserByUserName for username "
 				+ username);
@@ -91,21 +104,28 @@ public class UserAccountSpringService implements IUserAccountService {
 	 */
 	private void addDefaultSuperAdminUser() {
 		try {
-			User adminUser = findByUserName("ADMIN");
+			User adminUser = findByUserName(ApplicationConstant.DEFAULT_ADMIN_USERNAME);
 			if (adminUser == null) {
 				adminUser = new User();
-				adminUser.setEmailAddress("admin@xyz.com");
-				adminUser.setFirstName("System Administrator");
-				adminUser.setLastName("SUPER USER");
-				adminUser.setUsername("ADMIN");
+				adminUser
+						.setEmailAddress(ApplicationConstant.DEFAULT_ADMIN_EMAIL);
+				adminUser
+						.setFirstName(ApplicationConstant.DEFAULT_ADMIN_FIRST_NAME);
+				adminUser
+						.setLastName(ApplicationConstant.DEFAULT_ADMIN_LAST_NAME);
+				adminUser
+						.setUsername(ApplicationConstant.DEFAULT_ADMIN_USERNAME);
 				// Creating dynamic salt
 				Object dynamicSalt = this.reflectionSaltSource
 						.getSalt(adminUser);
-				String password = this.md5PasswordEncoder.encodePassword(
-						"admin123", dynamicSalt);
+				String password = this.md5PasswordEncoder
+						.encodePassword(
+								ApplicationConstant.DEFAULT_ADMIN_PASSWORD,
+								dynamicSalt);
 				adminUser.setPassword(password);
 				Permission superUserPermission = new Permission();
-				superUserPermission.setPermission("ROLE_SUPER_USER");
+				superUserPermission
+						.setPermission(ApplicationConstant.DEFAULT_ADMIN_USER_ROLE);
 				adminUser.getPermissions().add(superUserPermission);
 				addUser(adminUser);
 				logger.info("Admin user added successfully ");
@@ -121,7 +141,7 @@ public class UserAccountSpringService implements IUserAccountService {
 	public List<User> findAll() {
 		logger.debug("A request for findAll");
 		Iterable<User> userIter = this.userRepository.findAll();
-		List<User> systemUsers= new ArrayList<User>();
+		List<User> systemUsers = new ArrayList<User>();
 		for (User user : userIter) {
 			systemUsers.add(user);
 		}

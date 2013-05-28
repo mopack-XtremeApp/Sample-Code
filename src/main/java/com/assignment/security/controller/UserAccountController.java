@@ -11,9 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -76,22 +74,10 @@ public class UserAccountController {
 						+ username);
 
 			}
-			User transientUser = new User();
-			transientUser.setEmailAddress(request.getParameter("emailAddress"));
-			transientUser.setFirstName(request.getParameter("firstName"));
 
-			transientUser.setLastName(request.getParameter("lastName"));
-			transientUser.setUsername(request.getParameter("username"));
-			// Creating dynamic salt
-			Object dynamicSalt = this.reflectionSaltSource
-					.getSalt(transientUser);
-			// Generating Password hash
-			String password = this.md5PasswordEncoder.encodePassword(
-					request.getParameter("password"), dynamicSalt);
+			User transientUser = getUserPrePopulatedInstance(request);
 
-			transientUser.setPassword(password);
-
-			userAccountSpringService.addUser(transientUser);
+			this.userAccountSpringService.addUser(transientUser);
 
 			userOperationResult.setMessage("Success");
 
@@ -105,6 +91,30 @@ public class UserAccountController {
 
 		}
 		return userOperationResult;
+	}
+
+	/**
+	 * The method is responsible for providing the User instance with
+	 * prepopulated all the request information in it.
+	 * 
+	 * @param request
+	 * @return
+	 */
+	private User getUserPrePopulatedInstance(HttpServletRequest request) {
+		User transientUser = new User();
+		transientUser.setEmailAddress(request.getParameter("emailAddress"));
+		transientUser.setFirstName(request.getParameter("firstName"));
+
+		transientUser.setLastName(request.getParameter("lastName"));
+		transientUser.setUsername(request.getParameter("username"));
+		// Creating dynamic salt
+		Object dynamicSalt = this.reflectionSaltSource.getSalt(transientUser);
+		// Generating Password hash
+		String password = this.md5PasswordEncoder.encodePassword(
+				request.getParameter("password"), dynamicSalt);
+
+		transientUser.setPassword(password);
+		return transientUser;
 	}
 
 	/**
@@ -128,7 +138,7 @@ public class UserAccountController {
 		try {
 			logger.info("A request for updateUser for userName " + username);
 
-			User existingUser = userAccountSpringService
+			User existingUser = this.userAccountSpringService
 					.findByUserName(username);
 			if (existingUser == null) {
 				throw new Exception("User does not exist with username "
@@ -139,15 +149,7 @@ public class UserAccountController {
 			existingUser.setFirstName(request.getParameter("firstName"));
 			existingUser.setLastName(request.getParameter("lastName"));
 
-			// Creating dynamic salt
-	/*		Object dynamicSalt = this.reflectionSaltSource
-					.getSalt(existingUser);
-
-			String password = this.md5PasswordEncoder.encodePassword(
-					request.getParameter("password"), dynamicSalt);
-			existingUser.setPassword(password);
-*/
-			userAccountSpringService.updateUser(existingUser);
+			this.userAccountSpringService.updateUser(existingUser);
 
 			userOperationResult.setMessage("Success");
 
@@ -162,12 +164,6 @@ public class UserAccountController {
 
 		}
 		return userOperationResult;
-	}
-
-	private boolean isNullOrEmpty(String value) {
-		if (value == null || value.isEmpty())
-			return true;
-		return false;
 	}
 
 	/**
@@ -187,14 +183,14 @@ public class UserAccountController {
 		try {
 			logger.info("A request for deleteUser for userName " + username);
 
-			User existingUser = userAccountSpringService
+			User existingUser = this.userAccountSpringService
 					.findByUserName(username);
 			if (existingUser == null) {
 				throw new Exception("User does not exist with username "
 						+ username);
 			}
 
-			userAccountSpringService.deleteUser(existingUser);
+			this.userAccountSpringService.deleteUser(existingUser);
 
 			userOperationResult.setMessage("Success");
 			logger.info("Successfully completed request for deleteUser for userName "
@@ -223,10 +219,11 @@ public class UserAccountController {
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody
 	User getUser(@PathVariable("username") String username) {
+		User existingUser = null;
 		try {
 			logger.info("A request for getUser for userName " + username);
 
-			User existingUser = userAccountSpringService
+			existingUser = this.userAccountSpringService
 					.findByUserName(username);
 			if (existingUser == null) {
 				throw new Exception("User does not exist with username "
@@ -235,15 +232,13 @@ public class UserAccountController {
 			logger.info("Sucessfully completed request for getUser for userName "
 					+ username);
 
-			return existingUser;
 		} catch (Throwable t) {
 			logger.error(
 					"An error while getting user " + username + " "
 							+ t.getMessage(), t);
-
-			return null;
-
 		}
+
+		return existingUser;
 
 	}
 
@@ -254,24 +249,22 @@ public class UserAccountController {
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody
 	java.util.List<User> findAll() {
+		List<User> existingUsers = null;
 		try {
 			logger.info("A request for findAll");
 
-			List<User> existingUsers = userAccountSpringService.findAll();
+			existingUsers = this.userAccountSpringService.findAll();
 			if (existingUsers == null) {
 				return new ArrayList<User>();
 			}
 
 			logger.info("Sucessfully completed request for findAll");
 
-			return existingUsers;
 		} catch (Throwable t) {
 			logger.error("An error while findAll users " + t.getMessage(), t);
 
-			return null;
-
 		}
-
+		return existingUsers;
 	}
 
 }

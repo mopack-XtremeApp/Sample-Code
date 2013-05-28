@@ -1,5 +1,6 @@
 package com.assignment.security.service.impl;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,14 +11,17 @@ import org.springframework.stereotype.Service;
 import com.assignment.security.service.IUserAccountService;
 
 /**
- * This service is responsible for authenticating user from the persistance
- * store.
+ * This service is responsible for providing User Instance from the persistance
+ * store store.
  * 
  * @author Moti Prajapti
  * 
  */
 @Service
 public class UserAuthenticationService implements UserDetailsService {
+
+	private static Logger logger = Logger
+			.getLogger(UserAuthenticationService.class);
 
 	@Autowired
 	private IUserAccountService userAccountSpringService;
@@ -29,6 +33,8 @@ public class UserAuthenticationService implements UserDetailsService {
 			throws UsernameNotFoundException {
 		UserDetails userDetail = null;
 		try {
+			logger.info("Trying to fetch User Instance for username "
+					+ username);
 			userDetail = userAccountSpringService.findByUserName(username);
 			if (userDetail == null) {
 				throw new UsernameNotFoundException("User " + username

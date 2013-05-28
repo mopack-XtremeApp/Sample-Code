@@ -9,12 +9,11 @@
 	 http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
 	 http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 
-	<import resource="app-context.xml"/>
-	
+	<!-- Importing DAO Application Context -->
+	<import resource="app-context-dao.xml" />
+
 	<!-- @Controller, @Service, @Configuration, etc. -->
 	<context:component-scan base-package="com.assignment.security" />
-
-
 
 
 	<!-- Total customization - see below for explanation. -->
@@ -39,8 +38,9 @@
 	<mvc:annotation-driven
 		content-negotiation-manager="contentNegotiationManager" />
 
-	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
-		<property name = "alwaysUseFullPath" value = "true" />
+	<bean
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+		<property name="alwaysUseFullPath" value="true" />
 	</bean>
 
 

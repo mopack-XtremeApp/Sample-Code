@@ -1,5 +1,10 @@
 package com.assignment.security.controller.bo;
 
+/**
+ * Encapsulate HTTP Operation result.
+ * @author Moti Prajapati
+ *
+ */
 public class HttpOperationResult {
 
 	private String operation;

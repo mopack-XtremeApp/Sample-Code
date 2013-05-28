@@ -9,6 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.Test;
 import org.springframework.http.MediaType;
 
+import com.assignment.security.ApplicationConstant;
+
 public class UserAuthenticationTest extends BaseJUnitTest {
 
 	@Test
@@ -16,13 +18,13 @@ public class UserAuthenticationTest extends BaseJUnitTest {
 
 		super.mockMvc
 				.perform(
-						post("/authenticate").param("username", "ADMIN")
-								.param("password", "admin123")
+						post("/authenticate").param("username", ApplicationConstant.DEFAULT_ADMIN_USERNAME)
+								.param("password", ApplicationConstant.DEFAULT_ADMIN_PASSWORD)
 
 								.accept(MediaType.APPLICATION_JSON))
 				.andDo(print()).andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
-				.andExpect(jsonPath("message").value("SUPER USER"));
+				.andExpect(jsonPath("message").value(ApplicationConstant.ADMIN_USR_LOGIN_INDICATOR));
 
 	}
 

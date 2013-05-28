@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.assignment.security.ApplicationConstant;
 import com.assignment.security.User;
 import com.assignment.security.controller.bo.HttpOperationResult;
 import com.assignment.security.service.IUserAccountService;
@@ -34,10 +35,10 @@ import com.assignment.security.service.IUserAccountService;
  */
 @Controller
 public class UserAuthenticationController {
- 
+
 	@Autowired
 	private IUserAccountService userAccountSpringService;
-	
+
 	@Autowired
 	private SaltSource reflectionSaltSource;
 
@@ -79,10 +80,11 @@ public class UserAuthenticationController {
 			SecurityContextHolder.getContext().setAuthentication(
 					authenticatedUser);
 
-			if (username.equalsIgnoreCase("ADMIN")) {
-				result.setMessage("SUPER USER");
+			if (username
+					.equalsIgnoreCase(ApplicationConstant.DEFAULT_ADMIN_USERNAME)) {
+				result.setMessage(ApplicationConstant.ADMIN_USR_LOGIN_INDICATOR);
 			} else {
-				result.setMessage("USER");
+				result.setMessage(ApplicationConstant.NORMAL_USR_LOGIN_INDICATOR);
 			}
 
 		} catch (Throwable throwable) {
@@ -92,24 +94,34 @@ public class UserAuthenticationController {
 
 		return result;
 	}
- 
+
+	/**
+	 * The method is responsible to logged out current user from the system.
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value = "/logout", method = RequestMethod.GET, produces = {
 			"application/xml", "application/json" })
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody
-	HttpOperationResult logout(HttpServletRequest request,HttpServletResponse response) {
+	HttpOperationResult logout(HttpServletRequest request,
+			HttpServletResponse response) {
 		HttpOperationResult result = new HttpOperationResult();
 		result.setOperation("logout");
 		result.setMessage("Logout Failed");
 		try {
-			
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		      if (auth != null){    
-		         new SecurityContextLogoutHandler().logout(request, response, auth);
-		        // new PersistentTokenBasedRememberMeServices().logout(request, response, auth);
-		      }
+
+			Authentication auth = SecurityContextHolder.getContext()
+					.getAuthentication();
+			if (auth != null) {
+				new SecurityContextLogoutHandler().logout(request, response,
+						auth);
+				// new PersistentTokenBasedRememberMeServices().logout(request,
+				// response, auth);
+			}
 			result.setMessage("Success");
-			
+
 		} catch (Throwable throwable) {
 			logger.error(throwable.getMessage(), throwable);
 			result.setMessage("Failed");

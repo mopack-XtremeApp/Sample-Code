@@ -25,6 +25,11 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 public class Permission implements Serializable{
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8328257463514911110L;
+
+	/**
 	 * Id of the user
 	 */
 	private Long id;
