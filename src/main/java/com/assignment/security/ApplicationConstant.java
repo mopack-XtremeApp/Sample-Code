@@ -1,6 +1,6 @@
 package com.assignment.security;
 /**
- * Application Constant Manager
+ * Application Constant Manager. It defines all the constants used throughout the  application.
  * @author Moti Prajapati
  *
  */
