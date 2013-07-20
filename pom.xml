@@ -214,7 +214,7 @@
 	</dependencies>
 
 	<scm>
-    	<developerConnection>scm:svn:https://github.com/motiprajapati/Sample-Code</developerConnection>
+    	<developerConnection>scm:git:https://github.com/motiprajapati/Sample-Code</developerConnection>
   	</scm>
 	<build>
 		<plugins>
