@@ -3,7 +3,7 @@
 	<groupId>com.assignment.security</groupId>
 	<artifactId>assignment-security</artifactId>
 	<packaging>war</packaging>
-	<version>1.0.RELEASE-SNAPSHOT</version>
+	<version>1.0.RELEASE</version>
 	<name>RESTful Interface Design</name>
 	<url>http://maven.apache.org</url>
 
@@ -214,7 +214,7 @@
 
 	<scm>
     	<developerConnection>scm:git:https://github.com/motiprajapati/Sample-Code</developerConnection>
-  	  <tag>assignment-sec-1.0.RELEASE</tag>
+  	  <tag>assignment-security-1.0.RELEASE</tag>
   </scm>
 	<build>
 		<plugins>
