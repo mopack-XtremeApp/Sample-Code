@@ -213,6 +213,9 @@
 
 	</dependencies>
 
+	<scm>
+    	<developerConnection>scm:svn:https://github.com/motiprajapati/Sample-Code</developerConnection>
+  	</scm>
 	<build>
 		<plugins>
 			<plugin>
@@ -226,6 +229,14 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.2</version>
 			</plugin>
+			<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-release-plugin</artifactId>
+			<version>2.4.1</version>
+			<configuration>
+			  <tagBase>https://github.com/motiprajapati/Sample-Code/releases</tagBase>
+			</configuration>
+		 </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
