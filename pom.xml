@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.assignment.security</groupId>
 	<artifactId>assignment-security</artifactId>
@@ -215,7 +214,8 @@
 
 	<scm>
     	<developerConnection>scm:git:https://github.com/motiprajapati/Sample-Code</developerConnection>
-  	</scm>
+  	  <tag>assignment-sec-1.0.RELEASE</tag>
+  </scm>
 	<build>
 		<plugins>
 			<plugin>
