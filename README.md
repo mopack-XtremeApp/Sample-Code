@@ -1,4 +1,5 @@
-# Spring MVC and JPA template application 
+# Sample User Management Application
+MVC and JPA application 
 
-This is a template for a web application that uses Spring MVC and JPA. The sample code is a simple CRUD page that manipulates records for a single model object.
+This is a sample user management web application that uses jquery and bootstrap as client side technology while Spring MVC and Hibernate/JPA as server side technology. 
 
